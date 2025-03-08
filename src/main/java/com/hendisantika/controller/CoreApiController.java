@@ -99,4 +99,10 @@ public class CoreApiController {
         JSONObject result = coreApi.cancelTransaction(transaction.get("transaction_id"));
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/transactions/expire", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> expireTransaction(@RequestBody Map<String, String> transaction) throws MidtransError {
+        JSONObject result = coreApi.expireTransaction(transaction.get("transaction_id"));
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+    }
 }
