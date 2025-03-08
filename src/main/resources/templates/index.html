@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common_header">
+    <title>Midtrans API Intergration</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header}"></div>
+
+<!-- Begin page content -->
+<main class="container" role="main" style="padding-top: 30px">
+    <div class="container">
+        <h2 class="mt-5">Midtrans Java Library Demo</h2>
+        <p class="lead">This is java springboot demo app to consume Midtrans API with Midtrans Java Library.</p>
+        <p>Please, read <a href="http://docs.midtrans.com" target="_blank">Midtrans Docs</a> if you need details
+            documentation.
+        </p>
+        <a href="https://bintray.com/midtrans/midtrans-java/com.midtrans/_latestVersion" target="_blank"> <img
+                src="https://api.bintray.com/packages/midtrans/midtrans-java/com.midtrans/images/download.svg"></a>
+        <a href="https://travis-ci.org/Xaxxis/midtrans-java" target="_blank"> <img
+                src="https://travis-ci.org/Xaxxis/midtrans-java.svg?branch=master"></a>
+        <a href="https://github.com/Midtrans/midtrans-java" target="_blank"> <img
+                src="https://img.shields.io/badge/Go%20to-GitHub%20project-blue?style=flat"></a>
+    </div>
+</main>
+
+<script crossorigin="anonymous"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
