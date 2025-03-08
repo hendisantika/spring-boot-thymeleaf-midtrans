@@ -105,4 +105,36 @@ public class CoreApiController {
         JSONObject result = coreApi.expireTransaction(transaction.get("transaction_id"));
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
+
+    // Midtrans Handling Notification
+    @PostMapping(value = "/notification", produces = MediaType.APPLICATION_JSON_VALUE)
+    private ResponseEntity<String> handleNotification(@RequestBody Map<String, Object> response) throws MidtransError {
+        String notifResponse = null;
+        if (!(response.isEmpty())) {
+            //Get Order ID from notification body
+            String orderId = (String) response.get("order_id");
+
+            // Get status transaction to api with order id
+            JSONObject transactionResult = coreApi.checkTransaction(orderId);
+
+            String transactionStatus = (String) transactionResult.get("transaction_status");
+            String fraudStatus = (String) transactionResult.get("fraud_status");
+
+            notifResponse = "Transaction notification received. Order ID: " + orderId + ". Transaction status: " + transactionStatus + ". Fraud status: " + fraudStatus;
+            log.info("notifResponse --> {}", notifResponse);
+
+            if (transactionStatus.equals("capture")) {
+                if (fraudStatus.equals("challenge")) {
+                    // TODO set transaction status on your database to 'challenge' e.g: 'Payment status challenged. Please take action on your Merchant Administration Portal
+                } else if (fraudStatus.equals("accept")) {
+                    // TODO set transaction status on your database to 'success'
+                }
+            } else if (transactionStatus.equals("cancel") || transactionStatus.equals("deny") || transactionStatus.equals("expire")) {
+                // TODO set transaction status on your database to 'failure'
+            } else if (transactionStatus.equals("pending")) {
+                // TODO set transaction status on your database to 'pending' / waiting payment
+            }
+        }
+        return new ResponseEntity<>(notifResponse, HttpStatus.OK);
+    }
 }
