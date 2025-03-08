@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -44,4 +45,19 @@ public class HomeController {
         model.addAttribute("data", objectMap);
         return "coreapi/core-api";
     }
+
+    @GetMapping(value = "/api/checkout")
+    public String checkOut(@RequestParam(value = "paymentType") String typePayment,
+                           Model model) {
+        Map<String, Object> result = dataMockup.initDataMock();
+        model.addAttribute("result", result);
+        model.addAttribute("clientKey", clientKey);
+        if (typePayment.equals("cc")) {
+            return "coreapi/credit-card";
+        } else if (typePayment.equals("gopay")) {
+            return "coreapi/gopay";
+        }
+        return "redirect:/api/core-api";
+    }
+
 }
