@@ -1,0 +1,42 @@
+# Spring Boot configuration
+spring:
+  profiles:
+    active: development
+  # Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/jvm_workshop4
+    username: hendisantika
+    password: hendi34
+  # JPA properties
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    generate-ddl: true
+  docker:
+    compose:
+      enabled: false
+# Logger configuration
+logging:
+  #  pattern:
+  #    console: "%d %-5level %logger : %msg%n"
+  level:
+    org.springframework: INFO
+    org.hibernate: DEBUG
+# Server configuration
+server:
+  port: 8080
+  sessionTimeout: 30
+# Security configuration
+security:
+  user:
+    name: user
+password: user
+
+midtrans:
+  serverkey: ${MIDTRANS_SERVER_KEY:YOUR_SERVER_KEY}
+  clientkey: ${MIDTRANS_CLIENT_KEY:YOUR_CLIENT_KEY}
