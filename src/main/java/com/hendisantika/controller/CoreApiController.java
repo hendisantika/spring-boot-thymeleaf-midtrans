@@ -87,4 +87,10 @@ public class CoreApiController {
         JSONObject result = coreApi.checkTransaction(transaction.get("transaction_id"));
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/transactions/approve", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> approveTransaction(@RequestBody Map<String, String> transaction) throws MidtransError {
+        JSONObject result = coreApi.approveTransaction(transaction.get("transaction_id"));
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+    }
 }
