@@ -147,4 +147,11 @@ public class CoreApiController {
         log.info("append1 --> {}", append1);
         return new ResponseEntity<>(append1, HttpStatus.OK);
     }
+
+    @PostMapping(value = "/notif/append2", produces = MediaType.APPLICATION_JSON_VALUE)
+    private ResponseEntity<String> appendNotif2(@RequestBody Map<String, Object> response) throws MidtransError {
+        String append2 = "################# TEST - Received Append Notification 2 ###################";
+        log.info(" --> {}", append2);
+        return new ResponseEntity<>(append2, HttpStatus.OK);
+    }
 }
