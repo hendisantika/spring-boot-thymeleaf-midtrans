@@ -69,5 +69,17 @@ public class CoreApiController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    // Core API Controller for fetch Gopay transaction
+    @PostMapping(value = "/gopay/charge", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> goPay() throws MidtransError {
+        dataMockup.setPaymentType("gopay");
+
+        Map<String, Object> body = new HashMap<>(dataMockup.initDataMock());
+
+        coreApi.apiConfig().paymentOverrideNotification("https://midtrans-java.herokuapp.com/notif/override1,https://midtrans-java.herokuapp.com/notif/override2");
+        JSONObject object = coreApi.chargeTransaction(body);
+        String result = object.toString();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 }
