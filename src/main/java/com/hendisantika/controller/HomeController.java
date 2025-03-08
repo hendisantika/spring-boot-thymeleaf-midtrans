@@ -4,7 +4,10 @@ import com.hendisantika.config.MockupData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,5 +36,12 @@ public class HomeController {
     @GetMapping(value = "/mobile-sdk")
     private String mobileSdk() {
         return "mobile/mobile-sdk";
+    }
+
+    @GetMapping(value = "/api/core-api")
+    public String coreApi(Model model) {
+        Map<String, Object> objectMap = dataMockup.initDataMock();
+        model.addAttribute("data", objectMap);
+        return "coreapi/core-api";
     }
 }
