@@ -4,6 +4,7 @@ import com.hendisantika.config.MockupData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,5 +25,9 @@ public class HomeController {
     @Value("${midtrans.clientkey}")
     private String sandboxClientKey;
 
+    @GetMapping(value = "/")
+    public String home() {
+        return index();
+    }
 
 }
