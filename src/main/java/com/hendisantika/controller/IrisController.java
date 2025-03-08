@@ -5,10 +5,21 @@ import com.midtrans.ConfigFactory;
 import com.midtrans.httpclient.error.MidtransError;
 import com.midtrans.service.MidtransIrisApi;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.hendisantika.entity.Constant.sandboxCreatorKey;
 
@@ -43,4 +54,47 @@ public class IrisController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/iris/index")
+    public String iris(Model model) throws MidtransError {
+        LocalDate localDate = LocalDate.now();
+        String fromDate = DateTimeFormatter.ofPattern("yyy-MM-dd").format(localDate);
+        String toDate = DateTimeFormatter.ofPattern("yyy-MM-dd").format(localDate);
+
+        JSONObject currentBalance = irisApi.getBalance();
+        JSONArray transactionHistory = irisApi.getTransactionHistory(fromDate, toDate);
+
+        List<Map<String, Object>> rows = new ArrayList<>();
+        List<String> headers = Arrays.asList("Name", "Amount", "Type", "Reference", "Account", "Bank", "Status");
+        for (int i = 0; i < transactionHistory.length(); i++) {
+            Map<String, Object> value = new HashMap<>();
+            if (transactionHistory.getJSONObject(i).has("beneficiary_name")) {
+                value.put("Name", transactionHistory.getJSONObject(i).getString("beneficiary_name"));
+            }
+            if (transactionHistory.getJSONObject(i).has("amount")) {
+                value.put("Amount", transactionHistory.getJSONObject(i).getString("amount"));
+            }
+            if (transactionHistory.getJSONObject(i).has("type")) {
+                value.put("Type", transactionHistory.getJSONObject(i).getString("type"));
+            }
+            if (transactionHistory.getJSONObject(i).has("reference_no")) {
+                value.put("Reference", transactionHistory.getJSONObject(i).getString("reference_no"));
+            }
+            if (transactionHistory.getJSONObject(i).has("beneficiary_account")) {
+                value.put("Account", transactionHistory.getJSONObject(i).getString("beneficiary_account"));
+            }
+            if (transactionHistory.getJSONObject(i).has("account")) {
+                value.put("Bank", transactionHistory.getJSONObject(i).getString("account"));
+            }
+            if (transactionHistory.getJSONObject(i).has("status")) {
+                value.put("Status", transactionHistory.getJSONObject(i).getString("status"));
+            }
+            rows.add(i, value);
+        }
+        model.addAttribute("fromDate", fromDate);
+        model.addAttribute("toDate", toDate);
+        model.addAttribute("headers", headers);
+        model.addAttribute("rows", rows);
+        model.addAttribute("balance", currentBalance.getString("balance"));
+        return "iris/index";
+    }
 }
