@@ -154,4 +154,11 @@ public class CoreApiController {
         log.info(" --> {}", append2);
         return new ResponseEntity<>(append2, HttpStatus.OK);
     }
+
+    @PostMapping(value = "/notif/override1", produces = MediaType.APPLICATION_JSON_VALUE)
+    private ResponseEntity<String> overrideNotif1(@RequestBody Map<String, Object> response) throws MidtransError {
+        String append1 = "################# TEST - Received Override Notification 1 ###################";
+        log.info("append1 --> {}", append1);
+        return new ResponseEntity<>(append1, HttpStatus.OK);
+    }
 }
