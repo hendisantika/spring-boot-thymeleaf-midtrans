@@ -82,4 +82,9 @@ public class CoreApiController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/transactions/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> checkTransaction(@RequestBody Map<String, String> transaction) throws MidtransError {
+        JSONObject result = coreApi.checkTransaction(transaction.get("transaction_id"));
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+    }
 }
