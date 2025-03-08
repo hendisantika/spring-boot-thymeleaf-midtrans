@@ -26,8 +26,12 @@ public class HomeController {
     private String sandboxClientKey;
 
     @GetMapping(value = "/")
-    public String home() {
-        return index();
+    private String index() {
+        return "index";
     }
 
+    @GetMapping(value = "/mobile-sdk")
+    private String mobileSdk() {
+        return "mobile/mobile-sdk";
+    }
 }
