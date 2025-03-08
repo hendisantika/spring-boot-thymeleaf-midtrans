@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static com.hendisantika.entity.Constant.sandboxCreatorKey;
 
@@ -96,5 +97,26 @@ public class IrisController {
         model.addAttribute("rows", rows);
         model.addAttribute("balance", currentBalance.getString("balance"));
         return "iris/index";
+    }
+
+    private static String getRandomNumberString() {
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        return String.format("%06d", number);
+    }
+
+    @GetMapping(value = "/iris/payouts")
+    public String payout(Model model) throws MidtransError {
+        JSONArray response = irisApi.getBeneficiaries();
+        List<String> listNameBeneficiaries = new ArrayList<>();
+        if (response != null) {
+            int len = response.length();
+            for (int i = 0; i < len; i++) {
+                listNameBeneficiaries.add((response.getJSONObject(i).getString("name")));
+            }
+        }
+        model.addAttribute("amounts", getRandomNumberString());
+        model.addAttribute("names", listNameBeneficiaries);
+        return "iris/create-payout";
     }
 }
