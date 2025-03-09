@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static com.hendisantika.entity.Constant.sandboxApproverKey;
 import static com.hendisantika.entity.Constant.sandboxCreatorKey;
 
 /**
@@ -157,4 +158,10 @@ public class IrisController {
         return beneficiary;
     }
 
+    @PostMapping(value = "/iris/payouts/approve")
+    public ResponseEntity<String> approve(@RequestBody Map<String, Object> params) throws MidtransError {
+        irisApi.apiConfig().setServerKey(sandboxApproverKey);
+        JSONObject result = irisApi.approvePayouts(params);
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+    }
 }
