@@ -7,6 +7,7 @@ import com.midtrans.service.MidtransIrisApi;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +28,7 @@ import java.util.Random;
 
 import static com.hendisantika.entity.Constant.sandboxApproverKey;
 import static com.hendisantika.entity.Constant.sandboxCreatorKey;
+import static okio.HashingSink.sha512;
 
 /**
  * Created by IntelliJ IDEA.
@@ -180,4 +183,52 @@ public class IrisController {
         JSONObject result = irisApi.getPayoutDetails(referenceNo);
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/iris/notifications")
+    public ResponseEntity<String> notifications(@RequestHeader("Iris-Signature") String irisSignature, HttpEntity<String> httpEntity) {
+        // Get json body request
+        String jsonBodyRequest = httpEntity.getBody();
+
+        // Create hash Signature from payload + iris-merchant-key
+        String hashParam = jsonBodyRequest + irisApi.apiConfig().getIRIS_MERCHANT_KEY();
+        String hashSignature = sha512(hashParam);
+
+        JSONObject jsonObject = new JSONObject(jsonBodyRequest);
+
+        // 1. Validate the value header Iris-Signature
+        if (irisSignature.equals(hashSignature)) {
+
+            if (jsonObject.getString("status").equals("approved")) {
+                // TODO set payouts status on your database to 'approved' e.g: STATUS 'Payout status approved
+                log.info("IRIS NOTIFICATION RECEIVED  : STATUS APPROVED");
+            } else if (jsonObject.getString("status").equals("rejected")) {
+                // TODO set payouts status on your database to 'rejected'
+                log.info("IRIS NOTIFICATION RECEIVED  : STATUS REJECTED");
+            } else if (jsonObject.getString("status").equals("processed")) {
+                // TODO set payouts status on your database to 'processed'
+                log.info("IRIS NOTIFICATION RECEIVED  : STATUS PROCESSED");
+            } else if (jsonObject.getString("status").equals("completed")) {
+                // TODO set payouts status on your database to 'completed'
+                log.info("IRIS NOTIFICATION RECEIVED  : STATUS COMPLETED");
+            } else if (jsonObject.getString("status").equals("failed")) {
+                // TODO set payouts status on your database to 'failed'
+                log.info("IRIS NOTIFICATION RECEIVED  : STATUS FAILED");
+            } else if (jsonObject.getString("status").equals("topup")) {
+                // TODO set topup status on your database to 'topup'
+                log.info("IRIS NOTIFICATION RECEIVED  : TOPUP");
+            }
+
+            /*
+            For testing purpose from Iris dashboard
+             */
+            else if (jsonObject.getString("status").equals("test")) {
+                log.info("IRIS NOTIFICATION RECEIVED : STATUS TEST");
+            }
+        } else {
+            log.info("IRIS NOTIFICATION RECEIVED : SIGNATURE NOT VALID");
+            return new ResponseEntity<>("SIGNATURE NOT VALID", HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
 }
