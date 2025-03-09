@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.hendisantika.entity.Constant.sandboxCreatorKey;
-import static com.midtrans.httpclient.IrisApi.getBeneficiaries;
 
 /**
  * Created by IntelliJ IDEA.
@@ -135,4 +134,27 @@ public class IrisController {
 
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
+
+    private Map<String, String> getBeneficiaries(Map<String, String> params) throws MidtransError {
+        irisApi.apiConfig().setServerKey(sandboxCreatorKey);
+        JSONArray result = irisApi.getBeneficiaries();
+        Map<String, String> beneficiary = new HashMap<>();
+        if (result != null) {
+            for (int i = 0; i < result.length(); i++) {
+                String resultName = result.getJSONObject(i).getString("name");
+                String paramName = params.get("name");
+                if (resultName.equals(paramName)) {
+                    beneficiary.put("beneficiary_name", result.getJSONObject(i).getString("name"));
+                    beneficiary.put("beneficiary_account", result.getJSONObject(i).getString("account"));
+                    beneficiary.put("beneficiary_bank", result.getJSONObject(i).getString("bank"));
+                    beneficiary.put("beneficiary_email", result.getJSONObject(i).getString("email"));
+                    beneficiary.put("amount", params.get("amount"));
+                    beneficiary.put("notes", params.get("notes"));
+                    break;
+                }
+            }
+        }
+        return beneficiary;
+    }
+
 }
