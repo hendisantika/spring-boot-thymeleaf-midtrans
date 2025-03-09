@@ -94,4 +94,48 @@ public class SnapController {
         model.addAttribute("data", objectMap);
         return "workshop";
     }
+
+    @PostMapping(value = "/checkout")
+    public String checkoutJVMWorkshop(@RequestParam(value = "enablePay", required = false) List<String> listPay,
+                                      @RequestParam(value = "snapType") String snapType,
+                                      Model model) throws MidtransError {
+
+        Midtrans.clientKey = sandboxClientKey;
+        Midtrans.serverKey = sandboxServerKey;
+        // Get ClientKey from Midtrans Configuration class
+        String clientKey = Midtrans.getClientKey();
+
+        // New Map Object for JSON raw request body
+        Map<String, Object> requestBody = new HashMap<>();
+
+        // Add enablePayment from @RequestParam to dataMockup
+        List<String> paymentList = new ArrayList<>();
+        if (listPay != null) {
+            paymentList.addAll(listPay);
+        }
+        Map<String, String> creditCard = new HashMap<>();
+        creditCard.put("secure", "true");
+        dataMockup = new MockupData();
+        dataMockup.creditCard(creditCard);
+        dataMockup.enablePayments(paymentList);
+
+        // PutAll data mockUp to requestBody
+        requestBody.putAll(dataMockup.initDataMock());
+
+        // send data to frontEnd snapPopUp
+        if (snapType.equals("snap")) {
+            model.addAttribute("result", requestBody);
+            model.addAttribute("clientKey", clientKey);
+            // token object getData token to API with createTransactionToken() method return String token
+            model.addAttribute("transactionToken", SnapApi.createTransactionToken(requestBody));
+            return "checkout";
+            // send data to frontEnd redirect-url
+        } else {
+            model.addAttribute("result", requestBody);
+            // redirectURL get url redirect to API with createTransactionRedirectUrl() method, with return String url redirect
+            model.addAttribute("redirectURL", SnapApi.createTransactionRedirectUrl(requestBody));
+            return "checkout";
+        }
+    }
+
 }
