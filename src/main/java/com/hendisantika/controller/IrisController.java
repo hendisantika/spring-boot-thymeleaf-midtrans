@@ -172,4 +172,12 @@ public class IrisController {
         JSONObject result = irisApi.rejectPayouts(params);
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/iris/payouts/details")
+    public ResponseEntity<String> payoutDetails(@RequestBody Map<String, String> params) throws MidtransError {
+        String referenceNo = params.get("reference_no");
+        irisApi.apiConfig().setServerKey(sandboxCreatorKey);
+        JSONObject result = irisApi.getPayoutDetails(referenceNo);
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+    }
 }
