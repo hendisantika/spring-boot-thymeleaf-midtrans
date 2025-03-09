@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,7 +32,6 @@ import java.util.Random;
 
 import static com.hendisantika.entity.Constant.sandboxApproverKey;
 import static com.hendisantika.entity.Constant.sandboxCreatorKey;
-import static okio.HashingSink.sha512;
 
 /**
  * Created by IntelliJ IDEA.
@@ -230,5 +233,34 @@ public class IrisController {
         }
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
+
+    private static String sha512(String input) {
+        try {
+            // getInstance() method is called with algorithm SHA-512
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+
+            /*
+            digest() method is called to calculate message digest of the input string.
+            returned as array of byte
+             */
+            byte[] messageDigest = md.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            // Convert byte array into signum representation
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            // Convert message digest into hex value
+            String signature = no.toString(16);
+
+            // Add preceding 0s to make it 32 bit
+            while (signature.length() < 32) {
+                signature = "0" + signature;
+            }
+            // return the HashString
+            return signature;
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
