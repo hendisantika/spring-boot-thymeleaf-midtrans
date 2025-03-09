@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +25,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static com.hendisantika.entity.Constant.sandboxCreatorKey;
+import static com.midtrans.httpclient.IrisApi.getBeneficiaries;
 
 /**
  * Created by IntelliJ IDEA.
@@ -118,5 +121,18 @@ public class IrisController {
         model.addAttribute("amounts", getRandomNumberString());
         model.addAttribute("names", listNameBeneficiaries);
         return "iris/create-payout";
+    }
+
+    @PostMapping(value = "/iris/payouts/create")
+    public ResponseEntity<String> createPayout(@RequestBody Map<String, String> params) throws MidtransError {
+        ArrayList<Map<String, String>> payoutBeneficiaries = new ArrayList<>();
+        payoutBeneficiaries.add(getBeneficiaries(params));
+
+        Map<String, Object> payouts = new HashMap<>();
+        payouts.put("payouts", payoutBeneficiaries);
+        irisApi.apiConfig().setServerKey(sandboxCreatorKey);
+        JSONObject result = irisApi.createPayouts(payouts);
+
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 }
