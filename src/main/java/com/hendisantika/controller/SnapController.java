@@ -4,7 +4,6 @@ import com.hendisantika.config.MockupData;
 import com.midtrans.Midtrans;
 import com.midtrans.httpclient.SnapApi;
 import com.midtrans.httpclient.error.MidtransError;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +27,9 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-@RequiredArgsConstructor
 public class SnapController {
     //Data transaction Mockup
-    private final MockupData dataMockup;
+    private MockupData dataMockup;
 
     @Value("${midtrans.serverkey}")
     private String sandboxServerKey;
@@ -88,5 +86,12 @@ public class SnapController {
             model.addAttribute("redirectURL", SnapApi.createTransactionRedirectUrl(requestBody));
             return "snap/check-out";
         }
+    }
+
+    @GetMapping(value = "/workshop")
+    public String snapJVMWorkshop(Model model) {
+        Map<String, Object> objectMap = dataMockup.initDataMock();
+        model.addAttribute("data", objectMap);
+        return "workshop";
     }
 }
