@@ -72,13 +72,13 @@ cd spring-boot-thymeleaf-midtrans
 docker compose up -d
 ```
 
-The datasource is configured in `src/main/resources/application.yml`. Adjust it, or override it with environment
-variables to match the database from `compose.yml`:
+This starts PostgreSQL 18 with the `midtrans_db` database, which already matches the datasource in
+`src/main/resources/application.yml`. To use a different database, override it with environment variables:
 
 ```shell
-export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/midtrans_db
-export SPRING_DATASOURCE_USERNAME=yu71
-export SPRING_DATASOURCE_PASSWORD=53cret
+export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/your_db
+export SPRING_DATASOURCE_USERNAME=your_user
+export SPRING_DATASOURCE_PASSWORD=your_password
 ```
 
 ### 3. Configure Midtrans keys

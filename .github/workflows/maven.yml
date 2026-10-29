@@ -35,13 +35,13 @@ jobs:
       postgres:
         image: postgres:18-alpine
         env:
-          POSTGRES_DB: jvm_workshop4
-          POSTGRES_USER: hendisantika
-          POSTGRES_PASSWORD: hendi34
+          POSTGRES_DB: midtrans_db
+          POSTGRES_USER: yu71
+          POSTGRES_PASSWORD: 53cret
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U hendisantika -d jvm_workshop4"
+          --health-cmd "pg_isready -U yu71 -d midtrans_db"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
