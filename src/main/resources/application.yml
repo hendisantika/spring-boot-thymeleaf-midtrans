@@ -5,9 +5,9 @@ spring:
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/jvm_workshop4
-    username: hendisantika
-    password: hendi34
+    url: jdbc:postgresql://localhost:5432/midtrans_db
+    username: yu71
+    password: 53cret
   # JPA properties
   jpa:
     hibernate:
