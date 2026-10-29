@@ -48,7 +48,7 @@ Sandbox testing cards and the backend endpoint used by the Midtrans Android SDK 
 | Maven            | 3.10.x (via Maven Wrapper)  |
 | Thymeleaf        | + Layout Dialect 4.0.1      |
 | Midtrans Java    | 3.2.2                       |
-| Database         | PostgreSQL 17               |
+| Database         | PostgreSQL 18               |
 | Lombok           | managed by Spring Boot      |
 
 ## Prerequisites
