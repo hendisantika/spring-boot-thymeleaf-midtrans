@@ -39,7 +39,7 @@ public class SnapController {
 
     @GetMapping(value = "/snap")
     public String snap(Model model) {
-        Map<String, Object> objectMap = dataMockup.initDataMock();
+        Map<String, Object> objectMap = new MockupData().initDataMock();
         model.addAttribute("data", objectMap);
         return "snap/snap";
     }
@@ -90,7 +90,7 @@ public class SnapController {
 
     @GetMapping(value = "/workshop")
     public String snapJVMWorkshop(Model model) {
-        Map<String, Object> objectMap = dataMockup.initDataMock();
+        Map<String, Object> objectMap = new MockupData().initDataMock();
         model.addAttribute("data", objectMap);
         return "workshop";
     }
