@@ -33,7 +33,7 @@ jobs:
     # PostgreSQL required by the @SpringBootTest context (see application.yml)
     services:
       postgres:
-        image: postgres:17-alpine
+        image: postgres:18-alpine
         env:
           POSTGRES_DB: jvm_workshop4
           POSTGRES_USER: hendisantika
