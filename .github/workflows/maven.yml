@@ -13,23 +13,52 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
+    # PostgreSQL required by the @SpringBootTest context (see application.yml)
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: jvm_workshop4
+          POSTGRES_USER: hendisantika
+          POSTGRES_PASSWORD: hendi34
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hendisantika -d jvm_workshop4"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v7
-    - name: Set up JDK 23
+    - name: Set up JDK 25
       uses: actions/setup-java@v6
       with:
-        java-version: '23'
+        java-version: '25'
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: ./mvnw -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+    # Only on push to main: pull_request tokens (e.g. Dependabot PRs) are read-only
     - name: Update dependency graph
+      if: github.event_name == 'push'
       uses: advanced-security/maven-dependency-submission-action@a64327a7329c9939cf675e458452febe1894a70c
