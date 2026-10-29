@@ -9,6 +9,36 @@ A sample Spring Boot + Thymeleaf web application showing how to integrate the
 [Midtrans Java library](https://github.com/Midtrans/midtrans-java). It covers **Snap**, **Core API**
 (credit card and GoPay) and **Iris** (payouts).
 
+## Screenshots
+
+### Home
+
+![Home page](img/home.png)
+
+### Snap Demo
+
+Choose which payment methods to enable and the Snap type (pop-up or redirect), then check out.
+
+![Snap demo](img/snap.png)
+
+### Core API Demo
+
+Charge directly via the Core API using a credit card or GoPay.
+
+![Core API demo](img/core-api.png)
+
+### Mobile SDK Demo
+
+Sandbox testing cards and the backend endpoint used by the Midtrans Android SDK sample app.
+
+![Mobile SDK demo](img/mobile-sdk.png)
+
+### JVM Workshop Checkout
+
+![JVM Workshop checkout](img/workshop.png)
+
+> The Iris Disbursement pages call the Midtrans Iris API on load, so they need valid sandbox keys to render.
+
 ## Tech Stack
 
 | Component        | Version                     |
