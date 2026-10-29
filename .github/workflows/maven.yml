@@ -30,6 +30,22 @@ jobs:
     permissions:
       contents: write
 
+    # PostgreSQL required by the @SpringBootTest context (see application.yml)
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: jvm_workshop4
+          POSTGRES_USER: hendisantika
+          POSTGRES_PASSWORD: hendi34
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U hendisantika -d jvm_workshop4"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v7
     - name: Set up JDK 25
